@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Infrastructure Performance - Grafana Simulation</title>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons via CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fa-solid fa-chart-line logo-icon"></i>
+                    <span>Grafana</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active"><i class="fa-solid fa-gauge"></i> Overview</a>
+                <a href="http://localhost:9090" target="_blank" class="nav-item"><i class="fa-solid fa-database"></i> Prometheus</a>
+                <a href="http://localhost:9093" target="_blank" class="nav-item"><i class="fa-solid fa-bell"></i> Alertmanager</a>
+                <a href="https://github.com/MADHACKER85/infra-monitoring-stack" target="_blank" class="nav-item"><i class="fa-brands fa-github"></i> GitHub Code</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <i class="fa-solid fa-circle-user avatar"></i>
+                    <div class="user-info">
+                        <span class="user-name">MADHACKER85</span>
+                        <span class="user-role">IT Admin</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Disclaimer Banner -->
+            <div class="disclaimer-banner">
+                <div class="disclaimer-icon">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div class="disclaimer-text">
+                    <strong>Netlify Simulation Notice:</strong> This live page is an interactive frontend demonstration of the observability stack. The production containerized environment is deployed locally/on server VMs using Docker Compose, Prometheus, and Grafana.
+                </div>
+            </div>
+
+            <!-- Top Toolbar -->
+            <header class="content-header">
+                <div class="title-section">
+                    <h1>Server Infrastructure Performance</h1>
+                </div>
+                <div class="toolbar-section">
+                    <div class="time-picker">
+                        <i class="fa-regular fa-clock"></i>
+                        <span>Last 15 minutes</span>
+                    </div>
+                    <div class="refresh-indicator">
+                        <i class="fa-solid fa-rotate-right spinning"></i>
+                        <span>5s refresh</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Alerts Feed -->
+            <div class="alert-feed-container" id="alert-feed" style="display: none;">
+                <div class="alert-card warning">
+                    <div class="alert-icon">
+                        <i class="fa-solid fa-triangle-exclamation blink"></i>
+                    </div>
+                    <div class="alert-details">
+                        <h4>[FIRING] HighCpuUsage</h4>
+                        <p>CPU load on node-exporter:9100 is at <span id="alert-cpu-value">84.50</span>% (Threshold: &gt; 5%).</p>
+                    </div>
+                    <div class="alert-timestamp">
+                        Active since: Just now
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid Layout Panels -->
+            <div class="dashboard-grid">
+                <!-- Panel 1: Uptime (Stat) -->
+                <div class="panel-card stat-panel" id="panel-uptime">
+                    <h3 class="panel-title">System Uptime</h3>
+                    <div class="stat-value" id="uptime-value">0d 0h 15m 32s</div>
+                    <div class="stat-label">node-exporter:9100</div>
+                </div>
+
+                <!-- Panel 2: Active Alerts (Stat) -->
+                <div class="panel-card stat-panel alert-count-panel" id="panel-alerts-count">
+                    <h3 class="panel-title">Active Alerts</h3>
+                    <div class="stat-value text-green" id="alerts-count-value">0</div>
+                    <div class="stat-label">Prometheus Status</div>
+                </div>
+
+                <!-- Panel 3: Disk Space (Bar Gauge) -->
+                <div class="panel-card progress-panel" id="panel-disk">
+                    <h3 class="panel-title">Disk Space Utilization</h3>
+                    <div class="progress-container">
+                        <div class="progress-info">
+                            <span>Root Disk (/) Usage</span>
+                            <span id="disk-value">38.4%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 38.4%;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-label">Mount: / (Capacity: 250 GB)</div>
+                </div>
+
+                <!-- Panel 4: CPU Graph -->
+                <div class="panel-card chart-panel" id="panel-cpu">
+                    <h3 class="panel-title">CPU Usage</h3>
+                    <div class="chart-container">
+                        <canvas id="cpuChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Panel 5: Memory Graph -->
+                <div class="panel-card chart-panel" id="panel-memory">
+                    <h3 class="panel-title">Memory Usage</h3>
+                    <div class="chart-container">
+                        <canvas id="memoryChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Panel 6: Network Traffic Graph -->
+                <div class="panel-card chart-panel full-width" id="panel-network">
+                    <h3 class="panel-title">Network Traffic</h3>
+                    <div class="chart-container">
+                        <canvas id="networkChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load Simulator Control Panel Widget -->
+            <section class="simulator-controls-section">
+                <div class="simulator-card">
+                    <div class="sim-header">
+                        <i class="fa-solid fa-flask"></i>
+                        <h2>Interactive Metric Load Simulator</h2>
+                    </div>
+                    <p>Simulate resource stress to see how the Grafana gauges react and how Prometheus registers the CPU warning alert.</p>
+                    <div class="sim-buttons">
+                        <button class="btn btn-stress" id="btn-stress-on">
+                            <i class="fa-solid fa-bolt-lightning"></i> Trigger CPU Stress (Spike &gt; 5%)
+                        </button>
+                        <button class="btn btn-normalize" id="btn-stress-off" disabled>
+                            <i class="fa-solid fa-leaf"></i> Stop Stress (Normalize)
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Copyright and Legal Protection Disclaimer -->
+            <footer class="app-footer">
+                <div class="footer-links">
+                    <a href="https://github.com/MADHACKER85/infra-monitoring-stack/blob/main/LICENSE" target="_blank">MIT License</a>
+                    <span>&bull;</span>
+                    <a href="https://github.com/MADHACKER85/infra-monitoring-stack" target="_blank">GitHub README</a>
+                </div>
+                <div class="copyright-notice">
+                    Copyright &copy; 2026 MADHACKER85. All Rights Reserved.
+                </div>
+                <div class="legal-disclaimer">
+                    <strong>Copyright Protection Warning:</strong> Unauthorized duplication, distribution, or commercial rebranding of this dashboard interface or configuration files without proper credit to the copyright owner constitutes copyright infringement under standard intellectual property laws.
+                </div>
+            </footer>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
