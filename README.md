@@ -98,16 +98,16 @@ This project's code is maintained on GitHub:
 
 ---
 
-## 🌐 Netlify & Production Deployment Notice
+## 🌐 Live Demo & Production Deployment
+👉 **Live Netlify Mockup Demo**: [https://super-macaron-1797b4.netlify.app](https://super-macaron-1797b4.netlify.app)
+
 > [!NOTE]
-> **Why this project is not deployed on Netlify**: Netlify is a platform for static frontend sites (HTML/CSS/JS) and serverless APIs. It does not provide container runtimes or background database storage. Because this stack requires active Docker containers (Prometheus, Grafana, Alertmanager, Node Exporter) running continuously, it cannot be hosted on Netlify.
+> **Netlify Deployment Mode**: Netlify hosts static files and frontend architectures. Because a full containerized metrics stack (Prometheus/Grafana) requires server-side runtimes, the live link above is a **fully interactive dashboard mockup** built with HTML/CSS/JS (including an interactive CPU stress simulator and live-updating Chart.js charts).
 > 
-> **How to Deploy in Production**:
-> For production deployment, you would typically run this stack on a cloud virtual machine (VPS) such as:
-> * **DigitalOcean Droplet / Linode**: Cost-effective VMs running Docker.
-> * **AWS EC2 / Azure VM / GCP Compute Engine**: Standard cloud instances.
-> 
-> Simply clone this repository on the remote instance, install Docker/Docker Compose, and execute `docker compose up -d`. You can then configure a reverse proxy (like Nginx) or a firewall to secure access to ports `3000`, `9090`, and `9093`.
+> **How to Deploy the Real Containerized Stack in Production**:
+> To deploy the actual Docker Compose stack publicly, you should run it on a cloud Virtual Private Server (VPS):
+> * **Providers**: AWS EC2, Azure VM, Google Compute Engine, or DigitalOcean Droplet.
+> * **Steps**: Clone this Git repository onto the VPS, ensure Docker is installed, and run `docker compose up -d`. Protect ports `3000`, `9090`, and `9093` using cloud firewalls or a secure Nginx reverse proxy.
 
 ---
 
