@@ -99,7 +99,7 @@ This project's code is maintained on GitHub:
 ---
 
 ## 🌐 Live Demo & Production Deployment
-👉 **Live Netlify Mockup Demo**: [https://super-macaron-1797b4.netlify.app](https://super-macaron-1797b4.netlify.app)
+👉 **Live Netlify Mockup Demo**: [https://maddy-infra-monitoring.netlify.app](https://maddy-infra-monitoring.netlify.app)
 
 > [!NOTE]
 > **Netlify Deployment Mode**: Netlify hosts static files and frontend architectures. Because a full containerized metrics stack (Prometheus/Grafana) requires server-side runtimes, the live link above is a **fully interactive dashboard mockup** built with HTML/CSS/JS (including an interactive CPU stress simulator and live-updating Chart.js charts).
