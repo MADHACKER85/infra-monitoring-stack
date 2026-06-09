@@ -18,6 +18,82 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnStressOn = document.getElementById("btn-stress-on");
     const btnStressOff = document.getElementById("btn-stress-off");
 
+    // Tab Navigation Elements
+    const navOverview = document.getElementById("nav-overview");
+    const navPrometheus = document.getElementById("nav-prometheus");
+    const navAlertmanager = document.getElementById("nav-alertmanager");
+
+    const overviewTab = document.getElementById("overview-tab");
+    const prometheusTab = document.getElementById("prometheus-tab");
+    const alertmanagerTab = document.getElementById("alertmanager-tab");
+
+    const navItems = [navOverview, navPrometheus, navAlertmanager];
+    const tabs = [overviewTab, prometheusTab, alertmanagerTab];
+
+    // Prometheus Mock Elements
+    const promCpuStateBadge = document.getElementById("prom-cpu-state-badge");
+    const promCpuFiringList = document.getElementById("prom-cpu-firing-list");
+    const promCpuValue = document.getElementById("prom-cpu-value");
+
+    // Alertmanager Mock Elements
+    const amGroupCount = document.getElementById("am-group-count");
+    const amEmptyState = document.getElementById("am-empty-state");
+    const amAlertsGrid = document.getElementById("am-alerts-grid");
+    const amCpuValueDisplay = document.getElementById("am-cpu-value-display");
+
+    // Tab switching handler
+    function switchTab(targetId) {
+        navItems.forEach(item => {
+            if (item) item.classList.remove("active");
+        });
+        
+        tabs.forEach(tab => {
+            if (tab) {
+                tab.style.display = "none";
+                tab.classList.remove("active");
+            }
+        });
+
+        if (targetId === "overview") {
+            if (navOverview) navOverview.classList.add("active");
+            if (overviewTab) {
+                overviewTab.style.display = "block";
+                overviewTab.classList.add("active");
+            }
+        } else if (targetId === "prometheus") {
+            if (navPrometheus) navPrometheus.classList.add("active");
+            if (prometheusTab) {
+                prometheusTab.style.display = "block";
+                prometheusTab.classList.add("active");
+            }
+        } else if (targetId === "alertmanager") {
+            if (navAlertmanager) navAlertmanager.classList.add("active");
+            if (alertmanagerTab) {
+                alertmanagerTab.style.display = "block";
+                alertmanagerTab.classList.add("active");
+            }
+        }
+    }
+
+    if (navOverview) {
+        navOverview.addEventListener("click", (e) => {
+            e.preventDefault();
+            switchTab("overview");
+        });
+    }
+    if (navPrometheus) {
+        navPrometheus.addEventListener("click", (e) => {
+            e.preventDefault();
+            switchTab("prometheus");
+        });
+    }
+    if (navAlertmanager) {
+        navAlertmanager.addEventListener("click", (e) => {
+            e.preventDefault();
+            switchTab("alertmanager");
+        });
+    }
+
     // Initialize Chart.js default colors
     Chart.defaults.color = '#8e9aae';
     Chart.defaults.borderColor = '#2c323d';
@@ -156,7 +232,9 @@ document.addEventListener("DOMContentLoaded", () => {
             nextMemVal = Math.random() * (48 - 45) + 45; // memory creeps up slightly
             
             // Update alert card text
-            alertCpuValueEl.innerText = nextCpuVal.toFixed(2);
+            if (alertCpuValueEl) alertCpuValueEl.innerText = nextCpuVal.toFixed(2);
+            if (promCpuValue) promCpuValue.innerText = nextCpuVal.toFixed(2);
+            if (amCpuValueDisplay) amCpuValueDisplay.innerText = nextCpuVal.toFixed(2);
         } else {
             nextCpuVal = Math.random() * (6 - 2) + 2;   // 2-6% normal
             nextMemVal = Math.random() * (44 - 42) + 42; // stable memory
@@ -196,12 +274,33 @@ document.addEventListener("DOMContentLoaded", () => {
         isStressed = true;
         alertCount = 1;
         
-        // UI Updates
+        // UI Updates - Overview Tab
         alertsCountValueEl.innerText = alertCount;
         alertsCountValueEl.classList.remove("text-green");
         alertsCountValueEl.classList.add("text-red");
         
         alertFeedEl.style.display = "block";
+
+        // UI Updates - Prometheus Tab
+        if (promCpuStateBadge) {
+            promCpuStateBadge.innerText = "firing";
+            promCpuStateBadge.classList.remove("inactive");
+            promCpuStateBadge.classList.add("firing");
+        }
+        if (promCpuFiringList) {
+            promCpuFiringList.style.display = "block";
+        }
+
+        // UI Updates - Alertmanager Tab
+        if (amGroupCount) {
+            amGroupCount.innerText = "1 active alert";
+        }
+        if (amEmptyState) {
+            amEmptyState.style.display = "none";
+        }
+        if (amAlertsGrid) {
+            amAlertsGrid.style.display = "grid";
+        }
         
         btnStressOn.disabled = true;
         btnStressOff.disabled = false;
@@ -211,12 +310,33 @@ document.addEventListener("DOMContentLoaded", () => {
         isStressed = false;
         alertCount = 0;
         
-        // UI Updates
+        // UI Updates - Overview Tab
         alertsCountValueEl.innerText = alertCount;
         alertsCountValueEl.classList.remove("text-red");
         alertsCountValueEl.classList.add("text-green");
         
         alertFeedEl.style.display = "none";
+
+        // UI Updates - Prometheus Tab
+        if (promCpuStateBadge) {
+            promCpuStateBadge.innerText = "inactive";
+            promCpuStateBadge.classList.remove("firing");
+            promCpuStateBadge.classList.add("inactive");
+        }
+        if (promCpuFiringList) {
+            promCpuFiringList.style.display = "none";
+        }
+
+        // UI Updates - Alertmanager Tab
+        if (amGroupCount) {
+            amGroupCount.innerText = "0 active alerts";
+        }
+        if (amEmptyState) {
+            amEmptyState.style.display = "flex";
+        }
+        if (amAlertsGrid) {
+            amAlertsGrid.style.display = "none";
+        }
         
         btnStressOn.disabled = false;
         btnStressOff.disabled = true;

@@ -23,9 +23,9 @@
                 </div>
             </div>
             <nav class="sidebar-nav">
-                <a href="#" class="nav-item active"><i class="fa-solid fa-gauge"></i> Overview</a>
-                <a href="http://localhost:9090" target="_blank" class="nav-item"><i class="fa-solid fa-database"></i> Prometheus</a>
-                <a href="http://localhost:9093" target="_blank" class="nav-item"><i class="fa-solid fa-bell"></i> Alertmanager</a>
+                <a href="#overview" class="nav-item active" id="nav-overview"><i class="fa-solid fa-gauge"></i> Overview</a>
+                <a href="#prometheus" class="nav-item" id="nav-prometheus"><i class="fa-solid fa-database"></i> Prometheus</a>
+                <a href="#alertmanager" class="nav-item" id="nav-alertmanager"><i class="fa-solid fa-bell"></i> Alertmanager</a>
                 <a href="https://github.com/MADHACKER85/infra-monitoring-stack" target="_blank" class="nav-item"><i class="fa-brands fa-github"></i> GitHub Code</a>
             </nav>
             <div class="sidebar-footer">
@@ -51,91 +51,218 @@
                 </div>
             </div>
 
-            <!-- Top Toolbar -->
-            <header class="content-header">
-                <div class="title-section">
-                    <h1>Server Infrastructure Performance</h1>
-                </div>
-                <div class="toolbar-section">
-                    <div class="time-picker">
-                        <i class="fa-regular fa-clock"></i>
-                        <span>Last 15 minutes</span>
-                    </div>
-                    <div class="refresh-indicator">
-                        <i class="fa-solid fa-rotate-right spinning"></i>
-                        <span>5s refresh</span>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Dashboard Alerts Feed -->
-            <div class="alert-feed-container" id="alert-feed" style="display: none;">
-                <div class="alert-card warning">
-                    <div class="alert-icon">
-                        <i class="fa-solid fa-triangle-exclamation blink"></i>
-                    </div>
-                    <div class="alert-details">
-                        <h4>[FIRING] HighCpuUsage</h4>
-                        <p>CPU load on node-exporter:9100 is at <span id="alert-cpu-value">84.50</span>% (Threshold: &gt; 5%).</p>
-                    </div>
-                    <div class="alert-timestamp">
-                        Active since: Just now
-                    </div>
-                </div>
-            </div>
-
-            <!-- Grid Layout Panels -->
-            <div class="dashboard-grid">
-                <!-- Panel 1: Uptime (Stat) -->
-                <div class="panel-card stat-panel" id="panel-uptime">
-                    <h3 class="panel-title">System Uptime</h3>
-                    <div class="stat-value" id="uptime-value">0d 0h 15m 32s</div>
-                    <div class="stat-label">node-exporter:9100</div>
-                </div>
-
-                <!-- Panel 2: Active Alerts (Stat) -->
-                <div class="panel-card stat-panel alert-count-panel" id="panel-alerts-count">
-                    <h3 class="panel-title">Active Alerts</h3>
-                    <div class="stat-value text-green" id="alerts-count-value">0</div>
-                    <div class="stat-label">Prometheus Status</div>
-                </div>
-
-                <!-- Panel 3: Disk Space (Bar Gauge) -->
-                <div class="panel-card progress-panel" id="panel-disk">
-                    <h3 class="panel-title">Disk Space Utilization</h3>
-                    <div class="progress-container">
-                        <div class="progress-info">
-                            <span>Root Disk (/) Usage</span>
-                            <span id="disk-value">38.4%</span>
+            <!-- Tab Switcher Container -->
+            <div class="tabs-container">
+                <!-- Tab 1: Overview (Grafana Dashboard) -->
+                <div id="overview-tab" class="tab-content active">
+                    <!-- Top Toolbar -->
+                    <header class="content-header">
+                        <div class="title-section">
+                            <h1>Server Infrastructure Performance</h1>
                         </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 38.4%;"></div>
+                        <div class="toolbar-section">
+                            <div class="time-picker">
+                                <i class="fa-regular fa-clock"></i>
+                                <span>Last 15 minutes</span>
+                            </div>
+                            <div class="refresh-indicator">
+                                <i class="fa-solid fa-rotate-right spinning"></i>
+                                <span>5s refresh</span>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- Dashboard Alerts Feed -->
+                    <div class="alert-feed-container" id="alert-feed" style="display: none;">
+                        <div class="alert-card warning">
+                            <div class="alert-icon">
+                                <i class="fa-solid fa-triangle-exclamation blink"></i>
+                            </div>
+                            <div class="alert-details">
+                                <h4>[FIRING] HighCpuUsage</h4>
+                                <p>CPU load on node-exporter:9100 is at <span id="alert-cpu-value">84.50</span>% (Threshold: &gt; 5%).</p>
+                            </div>
+                            <div class="alert-timestamp">
+                                Active since: Just now
+                            </div>
                         </div>
                     </div>
-                    <div class="stat-label">Mount: / (Capacity: 250 GB)</div>
-                </div>
 
-                <!-- Panel 4: CPU Graph -->
-                <div class="panel-card chart-panel" id="panel-cpu">
-                    <h3 class="panel-title">CPU Usage</h3>
-                    <div class="chart-container">
-                        <canvas id="cpuChart"></canvas>
+                    <!-- Grid Layout Panels -->
+                    <div class="dashboard-grid">
+                        <!-- Panel 1: Uptime (Stat) -->
+                        <div class="panel-card stat-panel" id="panel-uptime">
+                            <h3 class="panel-title">System Uptime</h3>
+                            <div class="stat-value" id="uptime-value">0d 0h 15m 32s</div>
+                            <div class="stat-label">node-exporter:9100</div>
+                        </div>
+
+                        <!-- Panel 2: Active Alerts (Stat) -->
+                        <div class="panel-card stat-panel alert-count-panel" id="panel-alerts-count">
+                            <h3 class="panel-title">Active Alerts</h3>
+                            <div class="stat-value text-green" id="alerts-count-value">0</div>
+                            <div class="stat-label">Prometheus Status</div>
+                        </div>
+
+                        <!-- Panel 3: Disk Space (Bar Gauge) -->
+                        <div class="panel-card progress-panel" id="panel-disk">
+                            <h3 class="panel-title">Disk Space Utilization</h3>
+                            <div class="progress-container">
+                                <div class="progress-info">
+                                    <span>Root Disk (/) Usage</span>
+                                    <span id="disk-value">38.4%</span>
+                                </div>
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill" style="width: 38.4%;"></div>
+                                </div>
+                            </div>
+                            <div class="stat-label">Mount: / (Capacity: 250 GB)</div>
+                        </div>
+
+                        <!-- Panel 4: CPU Graph -->
+                        <div class="panel-card chart-panel" id="panel-cpu">
+                            <h3 class="panel-title">CPU Usage</h3>
+                            <div class="chart-container">
+                                <canvas id="cpuChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Panel 5: Memory Graph -->
+                        <div class="panel-card chart-panel" id="panel-memory">
+                            <h3 class="panel-title">Memory Usage</h3>
+                            <div class="chart-container">
+                                <canvas id="memoryChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Panel 6: Network Traffic Graph -->
+                        <div class="panel-card chart-panel full-width" id="panel-network">
+                            <h3 class="panel-title">Network Traffic</h3>
+                            <div class="chart-container">
+                                <canvas id="networkChart"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Panel 5: Memory Graph -->
-                <div class="panel-card chart-panel" id="panel-memory">
-                    <h3 class="panel-title">Memory Usage</h3>
-                    <div class="chart-container">
-                        <canvas id="memoryChart"></canvas>
+                <!-- Tab 2: Prometheus Mock UI -->
+                <div id="prometheus-tab" class="tab-content" style="display: none;">
+                    <div class="prometheus-mock">
+                        <header class="prom-header">
+                            <div class="prom-logo">
+                                <i class="fa-solid fa-fire-flame-simple"></i> Prometheus
+                            </div>
+                            <nav class="prom-nav">
+                                <a href="#" class="prom-nav-item active" onclick="event.preventDefault();">Alerts</a>
+                                <a href="#" class="prom-nav-item" onclick="event.preventDefault();">Graph</a>
+                                <a href="#" class="prom-nav-item" onclick="event.preventDefault();">Status</a>
+                                <a href="#" class="prom-nav-item" onclick="event.preventDefault();">Help</a>
+                            </nav>
+                            <div class="prom-version">v2.45.0</div>
+                        </header>
+                        <div class="prom-body">
+                            <div class="prom-alerts-container">
+                                <h2 class="prom-title">Alerts</h2>
+                                
+                                <div class="prom-rule-group">
+                                    <h3 class="prom-group-title">node-alerts.rules</h3>
+                                    
+                                    <!-- HighCpuUsage Alert Rule Card -->
+                                    <div class="prom-rule-card" id="prom-rule-cpu">
+                                        <div class="prom-rule-header">
+                                            <span class="prom-badge-state inactive" id="prom-cpu-state-badge">inactive</span>
+                                            <span class="prom-rule-name">HighCpuUsage</span>
+                                            <span class="prom-rule-expr">expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 5</span>
+                                        </div>
+                                        <div class="prom-rule-details">
+                                            <p><strong>For:</strong> 1m</p>
+                                            <p><strong>Labels:</strong> <span class="label-badge small">severity="warning"</span></p>
+                                            <p><strong>Annotations:</strong> summary="High CPU usage detected", description="CPU load on node-exporter is above 5%"</p>
+                                            
+                                            <!-- Firing alerts list (initially hidden) -->
+                                            <div class="prom-firing-list" id="prom-cpu-firing-list" style="display: none;">
+                                                <div class="prom-firing-alert">
+                                                    <div class="prom-alert-labels">
+                                                        <span class="label-badge-active">alertname="HighCpuUsage"</span>
+                                                        <span class="label-badge-active">instance="node-exporter:9100"</span>
+                                                        <span class="label-badge-active">job="node"</span>
+                                                        <span class="label-badge-active">severity="warning"</span>
+                                                    </div>
+                                                    <div class="prom-alert-value">
+                                                        <strong>Value:</strong> <span id="prom-cpu-value">84.50</span>%
+                                                    </div>
+                                                    <div class="prom-alert-active-since">
+                                                        <strong>Active Since:</strong> <span class="prom-timestamp">Just now</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Panel 6: Network Traffic Graph -->
-                <div class="panel-card chart-panel full-width" id="panel-network">
-                    <h3 class="panel-title">Network Traffic</h3>
-                    <div class="chart-container">
-                        <canvas id="networkChart"></canvas>
+                <!-- Tab 3: Alertmanager Mock UI -->
+                <div id="alertmanager-tab" class="tab-content" style="display: none;">
+                    <div class="alertmanager-mock">
+                        <header class="am-header">
+                            <div class="am-logo">
+                                <i class="fa-solid fa-bell"></i> Alertmanager
+                            </div>
+                            <nav class="am-nav">
+                                <a href="#" class="am-nav-item active" onclick="event.preventDefault();">Alerts</a>
+                                <a href="#" class="am-nav-item" onclick="event.preventDefault();">Silences</a>
+                                <a href="#" class="am-nav-item" onclick="event.preventDefault();">Status</a>
+                            </nav>
+                            <div class="am-search-bar">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" placeholder="Filter alerts (e.g. status=firing)" disabled>
+                            </div>
+                        </header>
+                        <div class="am-body">
+                            <div class="am-alerts-container">
+                                <!-- Group Header -->
+                                <div class="am-group-header">
+                                    <span class="am-group-title">Group: {job="node"}</span>
+                                    <span class="am-group-count" id="am-group-count">0 active alerts</span>
+                                </div>
+                                
+                                <!-- Empty State -->
+                                <div class="am-empty-state" id="am-empty-state">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    <p>No active alerts firing. System is healthy!</p>
+                                </div>
+
+                                <!-- Alertmanager Cards Grid -->
+                                <div class="am-alerts-grid" id="am-alerts-grid" style="display: none;">
+                                    <div class="am-alert-card warning-card">
+                                        <div class="am-card-header">
+                                            <span class="am-badge warning">firing</span>
+                                            <span class="am-alert-name">HighCpuUsage</span>
+                                        </div>
+                                        <div class="am-card-body">
+                                            <div class="am-label-group">
+                                                <strong>Labels:</strong>
+                                                <span class="am-label">alertname="HighCpuUsage"</span>
+                                                <span class="am-label">instance="node-exporter:9100"</span>
+                                                <span class="am-label">severity="warning"</span>
+                                            </div>
+                                            <div class="am-annotations-group">
+                                                <strong>Annotations:</strong>
+                                                <p><strong>summary:</strong> High CPU usage detected on server VM.</p>
+                                                <p><strong>description:</strong> Simulated CPU utilization is currently at <span id="am-cpu-value-display">84.50</span>%.</p>
+                                            </div>
+                                            <div class="am-card-footer">
+                                                <span class="am-time">Started: Just now</span>
+                                                <button class="btn-silence" onclick="alert('Silencing is a premium backend feature and is mock-disabled here.')"><i class="fa-solid fa-bell-slash"></i> Silence</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -147,7 +274,7 @@
                         <i class="fa-solid fa-flask"></i>
                         <h2>Interactive Metric Load Simulator</h2>
                     </div>
-                    <p>Simulate resource stress to see how the Grafana gauges react and how Prometheus registers the CPU warning alert.</p>
+                    <p>Simulate resource stress to see how the Grafana gauges react, how Prometheus registers the CPU warning alert, and how Alertmanager displays active firing alerts.</p>
                     <div class="sim-buttons">
                         <button class="btn btn-stress" id="btn-stress-on">
                             <i class="fa-solid fa-bolt-lightning"></i> Trigger CPU Stress (Spike &gt; 5%)

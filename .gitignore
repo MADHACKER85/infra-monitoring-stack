@@ -12,3 +12,6 @@ grafana/logs/
 *.log
 *.tmp
 wait_for_docker.ps1
+
+# Local Netlify folder
+.netlify
