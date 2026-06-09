@@ -1,0 +1,14 @@
+# OS files
+.DS_Store
+Thumbs.db
+*.db-journal
+
+# Grafana storage & dynamic data
+grafana/data/
+grafana/png/
+grafana/logs/
+
+# Local/temp files
+*.log
+*.tmp
+wait_for_docker.ps1

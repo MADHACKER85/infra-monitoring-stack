@@ -1,0 +1,38 @@
+groups:
+  - name: infrastructure_alerts
+    rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 10s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance {{ $labels.instance }} is down"
+          description: "The host target {{ $labels.instance }} has been unreachable for more than 10 seconds."
+
+      - alert: HighCpuUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[30s])) * 100) > 5
+        for: 10s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU load on {{ $labels.instance }} is at {{ printf \"%.2f\" $value }}%."
+
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 80
+        for: 10s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+          description: "Memory usage on {{ $labels.instance }} is at {{ printf \"%.2f\" $value }}%."
+
+      - alert: DiskSpaceWarning
+        expr: (node_filesystem_size_bytes{mountpoint="/"} - node_filesystem_free_bytes{mountpoint="/"}) / node_filesystem_size_bytes{mountpoint="/"} * 100 > 80
+        for: 10s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low disk space on {{ $labels.instance }} (Mount: /)"
+          description: "Disk usage for the root mount on {{ $labels.instance }} is at {{ printf \"%.2f\" $value }}%."
