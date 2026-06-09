@@ -89,3 +89,34 @@ To prove the alert system works and demonstrate it to leadership or team members
 6. Open Alertmanager (`http://localhost:9093`) to see the alert captured, grouped, and routed.
 7. Back in the PowerShell script, select **Option 3 (Stop all CPU Stress tasks)** to shut down the stress containers.
 8. Watch Grafana and Prometheus return to their green/healthy states.
+
+---
+
+## 🔗 GitHub Repository
+This project's code is maintained on GitHub:
+* **Repository Link**: [https://github.com/MADHACKER85/infra-monitoring-stack](https://github.com/MADHACKER85/infra-monitoring-stack)
+
+---
+
+## 🌐 Netlify & Production Deployment Notice
+> [!NOTE]
+> **Why this project is not deployed on Netlify**: Netlify is a platform for static frontend sites (HTML/CSS/JS) and serverless APIs. It does not provide container runtimes or background database storage. Because this stack requires active Docker containers (Prometheus, Grafana, Alertmanager, Node Exporter) running continuously, it cannot be hosted on Netlify.
+> 
+> **How to Deploy in Production**:
+> For production deployment, you would typically run this stack on a cloud virtual machine (VPS) such as:
+> * **DigitalOcean Droplet / Linode**: Cost-effective VMs running Docker.
+> * **AWS EC2 / Azure VM / GCP Compute Engine**: Standard cloud instances.
+> 
+> Simply clone this repository on the remote instance, install Docker/Docker Compose, and execute `docker compose up -d`. You can then configure a reverse proxy (like Nginx) or a firewall to secure access to ports `3000`, `9090`, and `9093`.
+
+---
+
+## 🛡️ Copyright & Disclaimer
+**Copyright (c) 2026 MADHACKER85. All Rights Reserved.**
+
+This software is provided under the terms of the **MIT License** (see the [LICENSE](./LICENSE) file for details). 
+
+### 🚫 Copyright Infringement & Fair Use Warning
+* Unauthorized commercial distribution, rebranding without attribution, or modification in violation of the MIT License terms constitutes copyright infringement.
+* Any usage of this software in commercial or enterprise environments must preserve the original copyright notice and license text in all copies or substantial portions of the software.
+* All external trademarks, service marks, and image assets (such as Docker, Prometheus, Grafana, and Netlify logo names) are the intellectual property of their respective owners. No endorsement or partnership is implied.
